@@ -2,21 +2,23 @@ version: "1.0"
 
 services:
   proposta-service:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: proposta-app
     depends_on:
       - propostadb
     networks:
       - proposta-network
     environment:
-      - DB_HOST=payment-db
+      - DB_HOST=proposta-db
       - DB_PORT=5432
-      - DB_NAME=payment-db
+      - DB_NAME=proposta-db
       - DB_USER=postgres
       - DB_PASSWORD=postgres
     ports:
       - 8081:8081
-  propostadb:
+  proposta-db:
     container_name: proposta-db
     image: postgres:latest
     environment:
@@ -27,7 +29,7 @@ services:
     networks:
       - proposta-network
     ports:
-      - "5434:5432"
+      - "5433:5432"
 
 networks:
   proposta-network:
