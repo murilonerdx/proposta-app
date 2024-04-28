@@ -11,7 +11,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/proposta")
+//@RequestMapping("/api/v1/proposta")
+@RequestMapping("/proposta") //Tive que mudar porque o cara fez o front apenas com /proposta
 @RequiredArgsConstructor
 public class PropostaController {
 	private final PropostaService propostaService;

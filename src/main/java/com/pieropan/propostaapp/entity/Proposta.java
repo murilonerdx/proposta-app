@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.text.NumberFormat;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,7 +42,9 @@ public class Proposta {
 				this.getUsuario().getTelefone(),
 				this.getUsuario().getCpf(),
 				this.getUsuario().getRenda(),
-				this.getValorSolicitado()
+				NumberFormat.getCurrencyInstance().format(this.getValorSolicitado()),
+				this.prazoPagamento,
+				this.aprovada
 		);
 	}
 }
