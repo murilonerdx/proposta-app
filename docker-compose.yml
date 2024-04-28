@@ -1,13 +1,23 @@
 version: "1.0"
-
 services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:latest
+    ports:
+      - 5673:5672
+      - 15673:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - proposta-network
   proposta-service:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: proposta-app
     depends_on:
-      - propostadb
+      - proposta-db
     networks:
       - proposta-network
     environment:
@@ -17,12 +27,21 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=postgres
     ports:
-      - 8081:8081
+      - 8080:8080
+  proposta-web:
+    image: matheuspieropan/proposta-web
+    container_name: proposta-web
+    depends_on:
+      - proposta-service
+    ports:
+      - "80:80"
+    networks:
+      - proposta-network
   proposta-db:
     container_name: proposta-db
     image: postgres:latest
     environment:
-      POSTGRES_DB: proposta_db
+      POSTGRES_DB: proposta-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       PGDATA: /data/postgres
@@ -30,7 +49,6 @@ services:
       - proposta-network
     ports:
       - "5433:5432"
-
 networks:
   proposta-network:
     driver: bridge
