@@ -22,4 +22,15 @@ public class Usuario {
 	@OneToOne(mappedBy = "usuario")
 	@JoinColumn(name="proposta_id")
 	private Proposta proposta;
+
+	public Usuario(Long id, String nome, String sobrenome, String cpf, String telefone, Double renda) {
+		this.id = id;
+		this.nome = nome;
+		this.sobrenome = sobrenome;
+		this.cpf = cpf;
+		this.telefone = telefone;
+		this.renda = renda;
+	}
+
+
 }

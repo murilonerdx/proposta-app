@@ -1,5 +1,7 @@
 package com.pieropan.propostaapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pieropan.propostaapp.dto.PropostaResponseDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +21,26 @@ public class Proposta {
 	private boolean integrada;
 	private String observacao;
 
-	@OneToOne()
+	@OneToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="id_usuario")
 	private Usuario usuario;
+
+	public Proposta(Double valorSolicitado, int prazoPagamento, Usuario usuario) {
+		this.valorSolicitado = valorSolicitado;
+		this.prazoPagamento = prazoPagamento;
+		this.usuario = usuario;
+	}
+
+	@JsonIgnore
+	public PropostaResponseDTO toResponseDTO(){
+		return new PropostaResponseDTO(
+				this.id,
+				this.getUsuario().getNome(),
+				this.getUsuario().getSobrenome(),
+				this.getUsuario().getTelefone(),
+				this.getUsuario().getCpf(),
+				this.getUsuario().getRenda(),
+				this.getValorSolicitado()
+		);
+	}
 }
