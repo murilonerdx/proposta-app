@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class PropostaService {
 	private final PropostaRepository propostaRepository;
 	private final UsuarioRepository usuarioRepository;
+	private final NotificacaoService notificacaoService;
 
 	public PropostaResponseDTO criarProposta(PropostaRequestDTO prd) throws Exception {
 		Proposta proposta = prd.toModel();
@@ -28,7 +29,15 @@ public class PropostaService {
 			throw new Exception("Esse CPF já tem uma proposta");
 		}
 
-		return propostaRepository.save(proposta).toResponseDTO();
+		try{
+			PropostaResponseDTO responseDTO = propostaRepository.save(proposta).toResponseDTO();
+
+			notificacaoService.notificar(responseDTO, "proposta-pendente.ex");
+			return responseDTO;
+		}catch(Exception e){
+			return null;
+		}
+
 	}
 
 	public PropostaResponseDTO obterPorId(Long id) {
