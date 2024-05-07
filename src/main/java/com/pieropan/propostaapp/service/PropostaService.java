@@ -34,7 +34,7 @@ public class PropostaService {
 
 			notificacaoService.notificar(responseDTO, "proposta-pendente.ex");
 			return responseDTO;
-		}catch(Exception e){
+		}catch(RuntimeException e){
 			return null;
 		}
 

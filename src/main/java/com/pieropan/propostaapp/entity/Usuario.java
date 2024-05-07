@@ -1,5 +1,6 @@
 package com.pieropan.propostaapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class Usuario {
 	private String telefone;
 	private Double renda;
 
+	@JsonBackReference
 	@OneToOne(mappedBy = "usuario")
 	@JoinColumn(name="proposta_id")
 	private Proposta proposta;

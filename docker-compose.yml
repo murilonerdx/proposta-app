@@ -3,12 +3,15 @@ services:
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:latest
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
     ports:
       - 5673:5672
       - 15673:15672
     volumes:
-      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/mnesia/
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
     networks:
       - proposta-network
   proposta-service:
@@ -18,9 +21,13 @@ services:
     container_name: proposta-app
     depends_on:
       - proposta-db
+      - rabbitmq
     networks:
       - proposta-network
     environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PASS=guest
       - DB_HOST=proposta-db
       - DB_PORT=5432
       - DB_NAME=proposta-db
